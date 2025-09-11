@@ -23,7 +23,6 @@ jobs:
         run: |
           cd backend
           npm install
-          npm run start
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
@@ -32,4 +31,5 @@ jobs:
           slot-name: 'Production'
           package: backend
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2FDE934EBCEC4F1E9F9949A17AAF2ECA }}
+
 

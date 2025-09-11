@@ -10,6 +10,6 @@ app.get("/health",(req,res)=>{
     res.status(200).json({message:"server running successfully"})
 })
 
-app.listen(PORT,()=>{
+app.listen(PORT||8000,()=>{
     console.log("server successfully running on port 2000");
 })

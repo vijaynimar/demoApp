@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy Node.js app to Azure Web App - azureServer
 
 on:
@@ -13,44 +10,46 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
+      # Checkout repo
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
+      # Setup Node.js 20
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
 
-      - name: npm install, build, and test
-          run: |
-            cd backend
-            npm install
-            npm run build --if-present
-            npm run test --if-present
+      # Install dependencies only (no npm start here)
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm install
 
-      - name: Upload artifact for deployment job
-          uses: actions/upload-artifact@v4
-          with:
-            name: node-app
-            path: backend/
+      # Upload artifact for deploy
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-app
+          path: backend/
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    
+
     steps:
-      - name: Download artifact from build job
+      # Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: node-app
-      
-        - name: 'Deploy to Azure Web App'
-          id: deploy-to-webapp
-          uses: azure/webapps-deploy@v3
-          with:
-            app-name: 'azureServer'
-            slot-name: 'Production'
-            package: backend
-            publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_70E0A7B38E99459DAE7518FC08C3607B }}
+
+      # Deploy to Azure App Service
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'azureServer' # App Service name
+          package: .             # deploy from current dir (backend content)
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}

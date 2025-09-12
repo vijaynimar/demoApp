@@ -31,11 +31,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path:
-            - .
-            - '!node_modules/'
-            - '!.git/'
-            - '!.github/'
+          path: |
+            .
+            !node_modules/
+            !.git/
+            !.github/
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,14 +48,10 @@ jobs:
         with:
           name: node-app
 
-      # Install dependencies in deploy environment
-      - name: Install dependencies
-        run: npm install
-
-      # Deploy to Azure Web App
+      # Deploy to Azure App Service
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'azureServer' # Your Azure App Service name
-          package: .              # Deploy from current directory
+          package: .              # deploy from current dir
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}

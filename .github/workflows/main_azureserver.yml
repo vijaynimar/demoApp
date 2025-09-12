@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: '20.x'
 
-      # Install dependencies (for artifact packaging)
+      # Install dependencies (don't need to build, just install)
       - name: Install dependencies
         run: npm install
 

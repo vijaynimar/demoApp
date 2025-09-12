@@ -22,24 +22,27 @@ jobs:
         with:
           node-version: '20.x'
 
-      # Install dependencies only (no npm start here)
+      # Install dependencies (don't need to build, just install)
       - name: Install dependencies
-        run: |
-          npm install
+        run: npm install
 
-      # Upload artifact for deploy
+      # Upload artifact (exclude node_modules, .git, workflows)
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: backend/
+          path: |
+            .
+            !node_modules/
+            !.git/
+            !.github/
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      # Download artifact from build job
+      # Download artifact
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
@@ -49,7 +52,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'azureServer' # App Service name
-          package: .             # deploy from current dir (backend content)
+          app-name: 'azureServer' # Your Azure App Service name
+          package: .              # deploy from current dir
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-

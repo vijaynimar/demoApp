@@ -25,7 +25,6 @@ jobs:
       # Install dependencies only (no npm start here)
       - name: Install dependencies
         run: |
-          cd backend
           npm install
 
       # Upload artifact for deploy
@@ -53,3 +52,4 @@ jobs:
           app-name: 'azureServer' # App Service name
           package: .             # deploy from current dir (backend content)
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+

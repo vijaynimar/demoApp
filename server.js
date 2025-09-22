@@ -9,7 +9,7 @@ app.use(express.json())
 app.get("/health",(req,res)=>{
     res.status(200).json({message:"server running successfully"})
 })
-const PORT=process.env.PORT
-app.listen(PORT,()=>{
+const PORT=process.env.PORT||8000
+app.listen(PORT,"0.0.0.0",()=>{
     console.log(`server successfully running on port ${PORT}`);
 })
